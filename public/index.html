@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StudioPDF</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@0.462.0"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="app">
+  <header class="glass top">
+    <h1><i data-lucide="file-stack"></i> StudioPDF</h1>
+    <button class="btn primary" id="exportBtn" disabled><i data-lucide="download"></i><span>Export PDF</span></button>
+  </header>
+
+  <main class="layout">
+    <aside class="glass panel" id="panel">
+      <h2>PDF settings</h2>
+      <label>Page size
+        <select id="pageSize">
+          <option value="a4">A4</option><option value="letter">Letter</option>
+          <option value="legal">Legal</option><option value="a5">A5</option>
+          <option value="fit">Fit page to image</option>
+        </select>
+      </label>
+      <label>Orientation
+        <select id="orient"><option value="auto">Auto (match image)</option><option value="p">Portrait</option><option value="l">Landscape</option></select>
+      </label>
+      <label>Margin <output id="marginOut">8 mm</output>
+        <input type="range" id="margin" min="0" max="30" value="8">
+      </label>
+      <label>Image quality <output id="qualOut">90%</output>
+        <input type="range" id="quality" min="40" max="100" value="90">
+      </label>
+      <label>File name <input type="text" id="fname" value="studiopdf-document"></label>
+      <button class="btn" id="clearBtn"><i data-lucide="trash-2"></i>Remove all</button>
+      <p class="hint" id="count">No pages yet.</p>
+    </aside>
+
+    <section class="stage">
+      <label class="drop glass" id="drop">
+        <input type="file" id="file" accept="image/*" multiple hidden>
+        <i data-lucide="image-plus"></i>
+        <strong>Add photos or scans</strong>
+        <span>Tap to choose, or drop images here</span>
+      </label>
+      <ul class="grid" id="grid"></ul>
+    </section>
+  </main>
+  <button class="btn fab" id="panelBtn" aria-label="PDF settings"><i data-lucide="sliders-horizontal"></i></button>
+</div>
+
+<div class="modal" id="studio" hidden>
+  <div class="glass sheet">
+    <div class="sheet-head">
+      <strong>Image studio</strong>
+      <button class="btn icon" id="closeStudio" aria-label="Close"><i data-lucide="x"></i></button>
+    </div>
+    <div class="sheet-body">
+      <div class="canvas-wrap"><img id="cropImg" alt=""></div>
+      <div class="tools">
+        <div class="row">
+          <button class="btn chip active" data-ar="NaN">Free</button>
+          <button class="btn chip" data-ar="1">1:1</button>
+          <button class="btn chip" data-ar="1.3333333">4:3</button>
+          <button class="btn chip" data-ar="1.7777778">16:9</button>
+          <button class="btn chip" id="lock" title="Lock or unlock ratio"><i data-lucide="lock-open"></i></button>
+        </div>
+        <div class="row">
+          <button class="btn icon" id="rotL" aria-label="Rotate left"><i data-lucide="rotate-ccw"></i></button>
+          <button class="btn icon" id="rotR" aria-label="Rotate right"><i data-lucide="rotate-cw"></i></button>
+          <button class="btn icon" id="flipH" aria-label="Flip horizontally"><i data-lucide="flip-horizontal-2"></i></button>
+          <button class="btn icon" id="flipV" aria-label="Flip vertically"><i data-lucide="flip-vertical-2"></i></button>
+          <input type="range" id="fine" min="-45" max="45" value="0" title="Straighten">
+        </div>
+        <div class="row presets">
+          <button class="btn chip active" data-p="none">Original</button>
+          <button class="btn chip" data-p="scan">Document scan</button>
+          <button class="btn chip" data-p="bw">Black &amp; white</button>
+          <button class="btn chip" data-p="vivid">Vivid</button>
+        </div>
+        <label>Brightness <input type="range" id="fBr" min="-50" max="50" value="0"></label>
+        <label>Contrast <input type="range" id="fCo" min="-50" max="80" value="0"></label>
+        <label>Saturation <input type="range" id="fSa" min="-100" max="100" value="0"></label>
+        <label>Sharpness <input type="range" id="fSh" min="0" max="100" value="0"></label>
+        <div class="row end">
+          <button class="btn" id="resetImg"><i data-lucide="undo-2"></i>Restore original</button>
+          <button class="btn primary" id="applyImg"><i data-lucide="check"></i>Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
