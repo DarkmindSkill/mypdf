@@ -1,0 +1,16 @@
+{
+  "name": "studiopdf",
+  "version": "1.0.0",
+  "description": "Photo and document to PDF studio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "legacy": "^0.0.3"
+  }
+}
